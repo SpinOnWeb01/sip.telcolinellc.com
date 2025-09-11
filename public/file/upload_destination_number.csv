@@ -1,0 +1,2 @@
+DID Number(Mandatory Field),UserName(Optional),ResellerName(Optional),Service(IP/MANAGE)(Optional),Details(SIP Profile User Name)(Optional),Description(Optional),CarrierName(Mandatory Field)
+18999999999,sipportal,,IP,sipportal,,all8series.com
