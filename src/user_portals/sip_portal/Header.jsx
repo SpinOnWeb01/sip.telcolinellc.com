@@ -199,7 +199,7 @@ function Header() {
                       display: "flex",
                     }}
                   >
-                    Toll Free Minute: {user.totaltoll_minutes === null ? 0 : user.totaltoll_minutes}
+                    Toll Free Rmg Minute: {user.toll_remaining_minutes === null ? 0 : user.toll_remaining_minutes.toFixed(2)}
                     
                   </Typography>
                   <Typography
@@ -210,7 +210,7 @@ function Header() {
                       display: "flex",
                     }}
                   >
-                    Local Minute: {user.total_minutes}
+                    Local Rmg Minute: {user.local_remaining_minutes === null ? 0 : user.local_remaining_minutes.toFixed(2)}
                     {/* {data?.data?.map((item, index) => {
                       return (
                         <>
