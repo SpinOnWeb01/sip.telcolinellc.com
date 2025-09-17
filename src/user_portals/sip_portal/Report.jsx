@@ -7,6 +7,7 @@ import {
   MenuItem,
   Popover,
   Select,
+  Box,
   Tooltip,
   Typography,
   useMediaQuery,
@@ -27,6 +28,8 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { callStatusMessages } from "../../pages/Tooltips";
+
+const drawerWidth = 240;
 dayjs.extend(utc);
 dayjs.extend(timezone);
 const useStyles = makeStyles({
@@ -141,16 +144,16 @@ const theme = createTheme({
 //   "FASTAGI_DOWN",
 // ];
 
-function Report() {
+function Report({colorThem}) {
   const classes = useStyles();
   const [currentAudio, setCurrentAudio] = useState(null);
   const railwayZone = "Asia/Kolkata"; // Replace with your desired timezone
-    const [fromDate, setFromDate] = useState(
-      dayjs().tz(railwayZone).startOf("day").format("DD/MM/YYYY HH:mm")
-    );
-    const [toDate, setToDate] = useState(
-      dayjs().tz(railwayZone).endOf("day").format("DD/MM/YYYY HH:mm") // Default to 23:59
-    );
+  const [fromDate, setFromDate] = useState(
+    dayjs().tz(railwayZone).startOf("day").format("DD/MM/YYYY HH:mm")
+  );
+  const [toDate, setToDate] = useState(
+    dayjs().tz(railwayZone).endOf("day").format("DD/MM/YYYY HH:mm") // Default to 23:59
+  );
   const [callDirection, setCallDirection] = useState("");
   const [didNumber, setDidNumber] = useState("");
   const [destination, setDestination] = useState("");
@@ -161,8 +164,8 @@ function Report() {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
   const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-    const isXs = useMediaQuery(theme.breakpoints.only("xs")); // < 600px
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isXs = useMediaQuery(theme.breakpoints.only("xs")); // < 600px
 
   const handleFromDateChange = (date) => {
     if (dayjs(date, "DD/MM/YYYY HH:mm", true).isValid()) {
@@ -184,7 +187,10 @@ function Report() {
 
   useEffect(() => {
     let data = JSON.stringify({
-      from_date: dayjs().tz(railwayZone).startOf("day").format("YYYY-MM-DD HH:MM"),
+      from_date: dayjs()
+        .tz(railwayZone)
+        .startOf("day")
+        .format("YYYY-MM-DD HH:MM"),
       to_date: dayjs().tz(railwayZone).endOf("day").format("YYYY-MM-DD HH:MM"),
     });
     dispatch(getManageReport(data));
@@ -391,9 +397,7 @@ function Report() {
           <>
             <span>
               {params.row.call_status === "ANSWER" ? (
-                <span style={{ color: "green" }}>
-                  {params.row.call_status}
-                </span>
+                <span style={{ color: "green" }}>{params.row.call_status}</span>
               ) : (
                 <span style={{ color: "red" }}>{params.row.call_status}</span>
               )}
@@ -402,7 +406,7 @@ function Report() {
         );
       },
     },
-   
+
     {
       field: "did_tfn",
       headerName: "DID Number",
@@ -456,7 +460,7 @@ function Report() {
       align: "center",
       headerClassName: "custom-header",
     },
-    
+
     {
       field: "call_direction",
       headerName: "Call Direction",
@@ -473,7 +477,7 @@ function Report() {
     //   align: "center",
     //   headerClassName: "custom-header",
     // },
-    
+
     // {
     //   field: "answer_at",
     //   headerName: "Call Answer Time",
@@ -619,7 +623,7 @@ function Report() {
       headerClassName: "custom-header",
       renderCell: (params) => {
         if (params.row.billsec >= 0 && params.row.recording_path !== null) {
-          console.log('params.row.billsec', params.row.recording_path)
+          console.log("params.row.billsec", params.row.recording_path);
           return (
             <div
               style={{
@@ -663,7 +667,7 @@ function Report() {
 
   const rows = [];
   state?.allManageReport?.managereport?.data &&
-  state?.allManageReport?.managereport?.data?.forEach((item, index) => {
+    state?.allManageReport?.managereport?.data?.forEach((item, index) => {
       rows.push({
         id: index + 1,
         did_tfn: item.tfn_number,
@@ -698,9 +702,18 @@ function Report() {
   //8921bf78-afcf-46c0-b0c4-19f702d39cca
   return (
     <>
-      <div className="main">
-        <section className="sidebar-sec">
-          <div className="container-fluid">
+       <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
+
             <div className="row">
               <div className="col-lg-12">
                 <div className="">
@@ -711,7 +724,7 @@ function Report() {
                       id="pills-home"
                       role="tabpanel"
                       aria-labelledby="pills-home-tab"
-                    >
+                      >
                       {/* <!--role-contet--> */}
                       <div className="tab_cntnt_box">
                         <div
@@ -967,7 +980,9 @@ function Report() {
                                 <DateTimePicker
                                   label="To Date"
                                   value={
-                                    toDate ? dayjs(toDate, "DD/MM/YYYY HH:mm") : null
+                                    toDate
+                                      ? dayjs(toDate, "DD/MM/YYYY HH:mm")
+                                      : null
                                   } // Convert selectedDate to a dayjs object
                                   onChange={handleToDateChange}
                                   renderInput={(props) => (
@@ -1044,17 +1059,17 @@ function Report() {
                       </div>
                     </div>
 
-                    {/* <!----> */}
-                    {/* 
-            <!----> */}
+               
                   </div>
-                  {/* <!----> */}
+                  
                 </div>
-              </div>
+              
             </div>
-          </div>
-        </section>
-      </div>
+            </div>
+           </Box>
+           </div>
+           
+           </div>
     </>
   );
 }

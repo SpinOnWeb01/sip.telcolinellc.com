@@ -1,12 +1,19 @@
 import { Box, IconButton, Tooltip } from "@mui/material";
-import { DataGrid, GridToolbar, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import socketIOClient from "socket.io-client";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Edit } from "@mui/icons-material";
 import { getSipBilling } from "../../redux/actions/sipPortal/sipPortal_billingAction";
-
+const drawerWidth = 240;
 const theme = createTheme({
   components: {
     MuiDataGrid: {
@@ -28,23 +35,21 @@ const theme = createTheme({
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
-      <GridToolbarFilterButton/>
+      <GridToolbarFilterButton />
     </GridToolbarContainer>
   );
 }
 
-function ManageCallActive() {
+function ManageCallActive({colorThem}) {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
   const current_user = localStorage.getItem("current_user");
-    const userId = localStorage.getItem(`user_${current_user}`)
-
-
+  const userId = localStorage.getItem(`user_${current_user}`);
 
   useEffect(() => {
-    dispatch(getSipBilling())
+    dispatch(getSipBilling());
   }, []); // Empty dependency array ensures this effect runs once on mount
 
   const columns = [
@@ -90,26 +95,25 @@ function ManageCallActive() {
           var day = date.getUTCDate();
           var month = date.getUTCMonth() + 1; // Month starts from 0
           var year = date.getUTCFullYear();
-       
 
           // Formatting single-digit day/month with leading zero if needed
           day = (day < 10 ? "0" : "") + day;
           month = (month < 10 ? "0" : "") + month;
 
           // Formatting single-digit hours/minutes/seconds with leading zero if needed
-       
-          var formattedDate =
-            day +
-            "/" +
-            month +
-            "/" +
-            year +
-            " " ;
-          return (<><span style={{color:"blue"}}>{day}/{month}/{year}</span></>);
+
+          var formattedDate = day + "/" + month + "/" + year + " ";
+          return (
+            <>
+              <span style={{ color: "blue" }}>
+                {day}/{month}/{year}
+              </span>
+            </>
+          );
         }
       },
     },
-    
+
     {
       field: "added_time",
       headerName: "Time",
@@ -121,24 +125,24 @@ function ManageCallActive() {
         if (params.value !== null) {
           const date = new Date(params.value);
           var hours = date.getUTCHours();
-          var minutes = date.getUTCMinutes();  
+          var minutes = date.getUTCMinutes();
           var seconds = date.getUTCSeconds();
           hours = (hours < 10 ? "0" : "") + hours;
           minutes = (minutes < 10 ? "0" : "") + minutes;
           seconds = (seconds < 10 ? "0" : "") + seconds;
-          var formattedDate =
-            hours +
-            ":" +
-            minutes +
-            ":" +
-            seconds;
-            return (<>
-            <span style={{color:"green"}}>{hours}:{minutes}:{seconds}</span></>);
+          var formattedDate = hours + ":" + minutes + ":" + seconds;
+          return (
+            <>
+              <span style={{ color: "green" }}>
+                {hours}:{minutes}:{seconds}
+              </span>
+            </>
+          );
         }
       },
     },
   ];
-  
+
   const rows = useMemo(() => {
     const calculatedRows = [];
     state?.getManageBilling?.billing &&
@@ -148,15 +152,25 @@ function ManageCallActive() {
           username: item?.username,
           added_date: item?.added_date,
           added_time: item?.added_date,
-          topup: item.topup
+          topup: item.topup,
         });
       });
     return calculatedRows;
   }, [state?.getManageBilling?.billing]);
   return (
     <>
-      <section className="sidebar-sec">
-        <div className="container-fluid">
+     
+           <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
           <div className="row">
             <div className="col-lg-12">
               <div className="">
@@ -188,20 +202,20 @@ function ManageCallActive() {
                       </div>
                       {/* <!--table---> */}
                       <ThemeProvider theme={theme}>
-                      <div style={{ height: '100%', width: '100%' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          headerClassName="custom-header"
-          // getRowClassName={(params) =>
-          //   isRowBordered(params) ? 'borderedGreen' : 'borderedRed'
-          // }
-          components={{ Toolbar: GridToolbar }}
-          slots={{
-            toolbar: CustomToolbar,
-          }}
-              autoHeight
-        />
+                        <div style={{ height: "100%", width: "100%" }}>
+                          <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            headerClassName="custom-header"
+                            // getRowClassName={(params) =>
+                            //   isRowBordered(params) ? 'borderedGreen' : 'borderedRed'
+                            // }
+                            components={{ Toolbar: GridToolbar }}
+                            slots={{
+                              toolbar: CustomToolbar,
+                            }}
+                            autoHeight
+                          />
                         </div>
                       </ThemeProvider>
 
@@ -219,8 +233,9 @@ function ManageCallActive() {
               </div>
             </div>
           </div>
+        </Box>
         </div>
-      </section>
+        </div>
     </>
   );
 }

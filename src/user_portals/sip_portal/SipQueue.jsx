@@ -44,6 +44,7 @@ import {
   updateManageQueue,
 } from "../../redux/actions/sipPortal/managePortal_queueAction";
 
+const drawerWidth = 240;
 const style = {
   position: "absolute",
   top: "50%",
@@ -103,7 +104,7 @@ const MenuProps = {
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
       <GridToolbarFilterButton />
     </GridToolbarContainer>
@@ -121,7 +122,7 @@ const array = [
   "rrordered",
 ];
 
-function SipQueue() {
+function SipQueue({colorThem}) {
   const current_user = localStorage.getItem("current_user");
   const token = JSON.parse(localStorage.getItem(`user_${current_user}`));
   const state = useSelector((state) => state);
@@ -156,7 +157,7 @@ function SipQueue() {
     setQueueName(row.name);
     setStrategy(row.strategy);
     setMoh(row.moh);
-    setRingtimeout(row.ringtimeout)
+    setRingtimeout(row.ringtimeout);
   }, []); // Memoize event handler
 
   const handleSubmit = (e) => {
@@ -334,7 +335,6 @@ function SipQueue() {
     //     width: 280,
     //     align: "center",
     //   },
-   
   ];
 
   const rows = useMemo(() => {
@@ -355,8 +355,18 @@ function SipQueue() {
   }, [state?.getManageQueue?.getQueue]);
   return (
     <>
-      <section className="sidebar-sec">
-        <div className="container-fluid">
+   
+           <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
           <div className="row">
             <div className="col-lg-12">
               <div className="">
@@ -776,7 +786,7 @@ function SipQueue() {
                       {/* end-edit-modal*/}
                       {/* <!--table---> */}
                       <ThemeProvider theme={theme}>
-                      <div style={{ height: '100%', width: '100%' }}>
+                        <div style={{ height: "100%", width: "100%" }}>
                           <DataGrid
                             rows={rows}
                             columns={columns}
@@ -788,7 +798,7 @@ function SipQueue() {
                             slots={{
                               toolbar: CustomToolbar,
                             }}
-                                autoHeight
+                            autoHeight
                           />
                         </div>
                       </ThemeProvider>
@@ -807,8 +817,10 @@ function SipQueue() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+      
+      </Box>
+      </div>
+      </div>
     </>
   );
 }

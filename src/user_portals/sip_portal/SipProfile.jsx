@@ -47,6 +47,7 @@ import {
   getSIPSipProfile,
   updateSIPSipProfile,
 } from "../../redux/actions/sipPortal/sipPortal_sipProfileAction";
+const drawerWidth = 240;
 const style = {
   position: "absolute",
   top: "50%",
@@ -119,7 +120,7 @@ function CustomToolbar() {
   );
 }
 
-function SipProfile() {
+function SipProfile({colorThem}) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [description, setDescription] = useState("");
@@ -310,8 +311,18 @@ function SipProfile() {
 
   return (
     <>
-      <section className="sidebar-sec">
-        <div className="container-fluid">
+   
+           <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
           <div className="row">
             <div className="col-lg-12">
               <div className="">
@@ -757,8 +768,9 @@ function SipProfile() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+       </Box>
+       </div>
+       </div>
     </>
   );
 }

@@ -13,7 +13,14 @@ import {
   Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { DataGrid, GridToolbar, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 import React, { useMemo, useState } from "react";
 import { Close, Edit } from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
@@ -24,6 +31,7 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { getManageRecording } from "../../redux/actions/sipPortal/managePortal_recordingAction";
 import { api } from "../../mockData";
 import axios from "axios";
+const drawerWidth = 240;
 
 const style = {
   position: "absolute",
@@ -56,14 +64,14 @@ const theme = createTheme({
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
-      <GridToolbarFilterButton/>
+      <GridToolbarFilterButton />
     </GridToolbarContainer>
   );
 }
 
-function SipRecording() {
+function SipRecording({colorThem}) {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
   const [file, setFile] = useState();
@@ -96,7 +104,7 @@ function SipRecording() {
 
     if (file) {
       const current_user = localStorage.getItem("current_user");
-    const token = localStorage.getItem(`user_${current_user}`)
+      const token = localStorage.getItem(`user_${current_user}`);
       const formData = new FormData();
       formData.append("file", file);
       formData.append("name", name);
@@ -143,7 +151,7 @@ function SipRecording() {
       e.preventDefault();
       if (file) {
         const current_user = localStorage.getItem("current_user");
-    const token = localStorage.getItem(`user_${current_user}`)
+        const token = localStorage.getItem(`user_${current_user}`);
         const formData = new FormData();
         formData.append("file", file);
         formData.append("id", id);
@@ -229,9 +237,12 @@ function SipRecording() {
                   style={{ cursor: "pointer", color: "#0e397f" }}
                 />
               </IconButton> */}
-              <audio controls style={{padding:"12px"}}>
-            <source src={`${api.dev}/api/getuserrecording/${params.row.recordingId}`} type="audio/wav"/>
-            </audio>
+              <audio controls style={{ padding: "12px" }}>
+                <source
+                  src={`${api.dev}/api/getuserrecording/${params.row.recordingId}`}
+                  type="audio/wav"
+                />
+              </audio>
             </Tooltip>
             {/* <IconButton onClick={() => handleMessage(params?.row?.username)}>
                 <Delete style={{ cursor: "pointer", color: "red" }} />
@@ -241,13 +252,13 @@ function SipRecording() {
       },
     },
     {
-        field: "username",
-        headerName: "UserName",
-        width: 200,
-        headerClassName: "custom-header",
-        headerAlign: "center",
-        align: "center",
-      },
+      field: "username",
+      headerName: "UserName",
+      width: 200,
+      headerClassName: "custom-header",
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "name",
       headerName: "Announcement Recordings",
@@ -327,7 +338,7 @@ function SipRecording() {
         );
       },
     },
-  
+
     {
       field: "barging",
       headerName: "",
@@ -363,8 +374,18 @@ function SipRecording() {
   }, [state?.getManageRecording?.getRecording]);
   return (
     <>
-      <section className="sidebar-sec">
-        <div className="container-fluid">
+    
+           <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
           <div className="row">
             <div className="col-lg-12">
               <div className="">
@@ -509,7 +530,7 @@ function SipRecording() {
                       </div>
                       {/* <!--table---> */}
                       <ThemeProvider theme={theme}>
-                      <div style={{ height: '100%', width: '100%' }}>
+                        <div style={{ height: "100%", width: "100%" }}>
                           <DataGrid
                             rows={rows}
                             columns={columns}
@@ -521,7 +542,7 @@ function SipRecording() {
                             slots={{
                               toolbar: CustomToolbar,
                             }}
-                                autoHeight
+                            autoHeight
                           />
                         </div>
                       </ThemeProvider>
@@ -645,8 +666,9 @@ function SipRecording() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+       </Box>
+       </div>
+       </div>
     </>
   );
 }

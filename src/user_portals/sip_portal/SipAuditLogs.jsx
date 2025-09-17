@@ -1,11 +1,18 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../../../src/style.css";
 import { Box } from "@mui/material";
-import { DataGrid, GridToolbar, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { api } from "../../mockData";
-
+const drawerWidth = 240;
 const theme = createTheme({
   components: {
     MuiDataGrid: {
@@ -27,17 +34,16 @@ const theme = createTheme({
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
-      <GridToolbarFilterButton/>
+      <GridToolbarFilterButton />
     </GridToolbarContainer>
   );
 }
 
-
-function SipAuditLogs() {
+function SipAuditLogs({colorThem}) {
   const current_user = localStorage.getItem("current_user");
-    const user = JSON.parse(localStorage.getItem(`user_${current_user}`));
+  const user = JSON.parse(localStorage.getItem(`user_${current_user}`));
 
   const [data, setData] = useState([]);
 
@@ -206,9 +212,18 @@ function SipAuditLogs() {
 
   return (
     <>
-      <div className="main">
-        <section className="sidebar-sec">
-          <div className="container-fluid">
+    
+           <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
             <div className="row">
               <div className="col-lg-12">
                 <div className="">
@@ -230,7 +245,7 @@ function SipAuditLogs() {
                         </div>
 
                         <ThemeProvider theme={theme}>
-                        <div style={{ height: '100%', width: '100%' }}>
+                          <div style={{ height: "100%", width: "100%" }}>
                             <DataGrid
                               rows={rows}
                               columns={columns}
@@ -239,7 +254,7 @@ function SipAuditLogs() {
                               slots={{
                                 toolbar: CustomToolbar,
                               }}
-                                  autoHeight
+                              autoHeight
                             />
                           </div>
                         </ThemeProvider>
@@ -435,9 +450,9 @@ function SipAuditLogs() {
                 </div>
               </div>
             </div>
+          </Box>
           </div>
-        </section>
-      </div>
+          </div>
     </>
   );
 }

@@ -1,4 +1,15 @@
-import { Box, Button, FormControl, FormControlLabel, FormLabel, IconButton, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  IconButton,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+} from "@mui/material";
 import {
   DataGrid,
   GridToolbar,
@@ -16,6 +27,7 @@ import { toast } from "react-toastify";
 import { api } from "../../mockData";
 import axios from "axios";
 import dayjs from "dayjs";
+const drawerWidth = 240;
 
 const theme = createTheme({
   components: {
@@ -52,34 +64,34 @@ export function CustomFooterStatusComponent(props) {
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
       <GridToolbarFilterButton />
     </GridToolbarContainer>
   );
 }
 
-function SipCallActive() {
+function SipCallActive({colorThem}) {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
   const current_user = localStorage.getItem("current_user");
   const userId = JSON.parse(localStorage.getItem(`user_${current_user}`));
   const [callDetails, setCallDetails] = useState("");
-  const [selectedValue, setSelectedValue] = useState('Active'); // Initialize state for selected radio value
+  const [selectedValue, setSelectedValue] = useState("Active"); // Initialize state for selected radio value
   const [option, setOption] = useState("L");
   const [timeStamp, setTimeStamp] = useState([]);
   const [timeDifference, setTimeDifference] = useState([]);
   const [queueRows, setQueueRows] = useState([]);
-  
+
   const parseTimestamp = () => {
     return timeStamp?.map((item) => {
       const date = new Date(item.TimeStamp);
       return date; // Keep Date objects for time difference calculation
     });
   };
-  
+
   const timestampDate = parseTimestamp();
-  
+
   // Function to calculate time differences for each timestamp
   const calculateTimeDifferences = () => {
     const currentTime = new Date();
@@ -91,29 +103,29 @@ function SipCallActive() {
       const diffInDays = Math.floor(diffInHours / 24);
 
       // Format with leading zeros
-    const formattedHours = String(diffInHours).padStart(2, '0');
-    const formattedMinutes = String(diffInMinutes % 60).padStart(2, '0');
-    const formattedSeconds = String(diffInSeconds % 60).padStart(2, '0');
-  
+      const formattedHours = String(diffInHours).padStart(2, "0");
+      const formattedMinutes = String(diffInMinutes % 60).padStart(2, "0");
+      const formattedSeconds = String(diffInSeconds % 60).padStart(2, "0");
+
       return {
         days: diffInDays,
-        hours: formattedHours ,
-        minutes: formattedMinutes ,
-        seconds: formattedSeconds 
+        hours: formattedHours,
+        minutes: formattedMinutes,
+        seconds: formattedSeconds,
       };
     });
-  
+
     setTimeDifference(differences);
   };
-  
+
   // Calculate time differences initially and update every 5 seconds
   useEffect(() => {
     calculateTimeDifferences(); // Initial calculation
-  
+
     const interval = setInterval(() => {
       calculateTimeDifferences(); // Recalculate every 5 seconds
     }, 5000);
-  
+
     return () => clearInterval(interval);
   }, [timeStamp]);
 
@@ -121,12 +133,9 @@ function SipCallActive() {
     setSelectedValue(event.target.value); // Update state with the selected radio value
   };
 
-
   useEffect(() => {
     dispatch(getAdminCallActive());
   }, [dispatch]); // Empty dependency array ensures this effect runs once on mount
-
-
 
   const handleBarging = async (data) => {
     const current_user = localStorage.getItem("current_user");
@@ -195,8 +204,8 @@ function SipCallActive() {
           }
         })
         .filter(Boolean) // Filter out any null entries
-        .filter((row) =>  row.UserId === userId.uid); // Filter rows where UserId matches userId.uid
-        
+        .filter((row) => row.UserId === userId.uid); // Filter rows where UserId matches userId.uid
+
       // Sort data by TimeStamp in descending order
       return parsedData.sort((a, b) => {
         const dateA = dayjs(a.TimeStamp);
@@ -206,7 +215,6 @@ function SipCallActive() {
     }
     return [];
   }, [state?.getAdminCallActive?.callactive, userId.uid]);
-  
 
   useEffect(() => {
     // Prepare timeStamp array from mockDataTeam
@@ -214,7 +222,7 @@ function SipCallActive() {
       id: item.id,
       TimeStamp: item.TimeStamp, // Assuming TimeStamp is a property of each item
     }));
-  
+
     setTimeStamp(formattedTimeStamps);
   }, [activeRows]);
 
@@ -323,12 +331,16 @@ function SipCallActive() {
       align: "center",
       renderCell: (params) => {
         if (params.value !== null) {
-          const index = activeRows.findIndex(item => item.id === params.row.id);
+          const index = activeRows.findIndex(
+            (item) => item.id === params.row.id
+          );
           const duration = timeDifference && timeDifference[index];
-          
+
           return (
             <span style={{ color: "green" }}>
-              {duration ? `${duration.hours}:${duration.minutes}:${duration.seconds}` : ''}
+              {duration
+                ? `${duration.hours}:${duration.minutes}:${duration.seconds}`
+                : ""}
             </span>
           );
         }
@@ -656,7 +668,7 @@ function SipCallActive() {
   ];
 
   // const queueRows = useMemo(() => {
-   
+
   //   return Object.keys(callDetails)
   //     .filter((key) => callDetails[key].UserId === userId.uid)
   //     .map((key) => ({
@@ -668,54 +680,62 @@ function SipCallActive() {
   const mockDataTeam = useMemo(() => {
     let rows = [];
     const uniqueIdSet = new Set();
-    
-    if (callDetails !== undefined) {
-      
-      Object.keys(callDetails).forEach((key) => {
-        if(callDetails[key].UserId === userId.uid){
-        const { Extensions, Uniqueid, ...rest } = callDetails[key];
 
-         // Handle cases where Extensions is empty
-         if (!Extensions || Object.keys(Extensions).length === 0) {
-          const uniqueId = `${Uniqueid}-default`;
-          if (!uniqueIdSet.has(uniqueId)) {
+    if (callDetails !== undefined) {
+      Object.keys(callDetails).forEach((key) => {
+        if (callDetails[key].UserId === userId.uid) {
+          const { Extensions, Uniqueid, ...rest } = callDetails[key];
+
+          // Handle cases where Extensions is empty
+          if (!Extensions || Object.keys(Extensions).length === 0) {
+            const uniqueId = `${Uniqueid}-default`;
+            if (!uniqueIdSet.has(uniqueId)) {
               uniqueIdSet.add(uniqueId);
               rows.push({
+                id: uniqueId,
+                Uniqueid: Uniqueid,
+                ...rest,
+                Extensions: [{ key: "", value: null }],
+              });
+            }
+          } else {
+            // Handle cases where Extensions has entries
+            Object.entries(Extensions).forEach(([extKey, value]) => {
+              const uniqueId = `${Uniqueid}-${extKey}`;
+              if (!uniqueIdSet.has(uniqueId)) {
+                uniqueIdSet.add(uniqueId);
+                rows.push({
                   id: uniqueId,
                   Uniqueid: Uniqueid,
                   ...rest,
-                  Extensions: [{ key: '', value: null }],
-              });
-          }
-      } else {
-          // Handle cases where Extensions has entries
-          Object.entries(Extensions).forEach(([extKey, value]) => {
-              const uniqueId = `${Uniqueid}-${extKey}`;
-              if (!uniqueIdSet.has(uniqueId)) {
-                  uniqueIdSet.add(uniqueId);
-                  rows.push({
-                      id: uniqueId,
-                      Uniqueid: Uniqueid,
-                      ...rest,
-                      Extensions: [{ key: extKey, value }],
-                  });
+                  Extensions: [{ key: extKey, value }],
+                });
               }
-          });
-      }
- 
-      }
+            });
+          }
+        }
       });
     }
 
-    const filteredRows = rows.filter(item => item.Status !== "ANSWER");
+    const filteredRows = rows.filter((item) => item.Status !== "ANSWER");
     setQueueRows(filteredRows);
     return filteredRows;
   }, [callDetails, userId.uid]);
 
   return (
     <>
-      <section className="sidebar-sec">
-        <div className="container-fluid">
+      
+           <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
           <div className="row">
             <div className="col-lg-12">
               <div className="">
@@ -727,8 +747,6 @@ function SipCallActive() {
                     role="tabpanel"
                     aria-labelledby="pills-home-tab"
                   >
-                     
-
                     {/* <!--active-calls-contet--> */}
                     <div className="tab_cntnt_box">
                       <div
@@ -740,74 +758,75 @@ function SipCallActive() {
                         }}
                       >
                         {/* <FormControl>
-      {/* <FormLabel id="demo-row-radio-buttons-group-label">Live Calls</FormLabel> 
-      <RadioGroup
-        row
-        aria-labelledby="demo-row-radio-buttons-group-label"
-        name="row-radio-buttons-group"
-        value={selectedValue} // Bind the selected value to state
-        onChange={handleChange} // Handle change event
-      >
-        <FormControlLabel value="Active" control={<Radio />} label="Active Calls" />
-        <FormControlLabel value="Queue" control={<Radio />} label="Queue Calls" />
-      </RadioGroup>
-    </FormControl> */}
-                       
+                        {/* <FormLabel id="demo-row-radio-buttons-group-label">Live Calls</FormLabel> 
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                          value={selectedValue} // Bind the selected value to state
+                          onChange={handleChange} // Handle change event
+                        >
+                          <FormControlLabel value="Active" control={<Radio />} label="Active Calls" />
+                          <FormControlLabel value="Queue" control={<Radio />} label="Queue Calls" />
+                        </RadioGroup>
+                      </FormControl> */}
                       </div>
-                      {selectedValue === "Active"  ? (<> <div className="cntnt_title">
-                          <h3>Live Calls</h3>
-                        </div>
-                      {/* <!--table---> */}
-                      <ThemeProvider theme={theme}>
-                        <div style={{ height: "100%", width: "100%" }}>
-                          <DataGrid
-                            rows={activeRows}
-                            columns={activeColumns}
-                            headerClassName="custom-header"
-                            // getRowClassName={(params) =>
-                            //   isRowBordered(params) ? 'borderedGreen' : 'borderedRed'
-                            // }
-                            components={{ Toolbar: GridToolbar }}
-                            slots={{
-                              toolbar: CustomToolbar,
-                            footer: CustomFooterStatusComponent,
-                                                            }}
-                                                            autoHeight
-                                                            disableColumnResize={false} // Allow column resizing
-                                                                hideFooterPagination={
-                                                                  window.innerWidth < 600
-                                                                } // Hide pagination for small screens
-                          />
-                        </div>
-                      </ThemeProvider></>) : (<>
-                        <div className="cntnt_title">
-                          <h3>Queue Calls</h3>
-                        </div>
-                      {/* <!--table---> */}
-                      <ThemeProvider theme={theme}>
-                        <div style={{ height: "100%", width: "100%" }}>
-                          <DataGrid
-                            rows={queueRows}
-                            columns={queueColumns}
-                            headerClassName="custom-header"
-                            // getRowClassName={(params) =>
-                            //   isRowBordered(params) ? 'borderedGreen' : 'borderedRed'
-                            // }
-                            components={{ Toolbar: GridToolbar }}
-                            slots={{
-                              toolbar: CustomToolbar,
-                            footer: CustomFooterStatusComponent,
-                                                            }}
-                                                            autoHeight
-                                                            disableColumnResize={false} // Allow column resizing
-                                                                hideFooterPagination={
-                                                                  window.innerWidth < 600
-                                                                } // Hide pagination for small screens
-                          />
-                        </div>
-                      </ThemeProvider>
-                      </>)}
-                     
+                      {selectedValue === "Active" ? (
+                        <>
+                          {" "}
+                          <div className="cntnt_title">
+                            <h3>Live Calls</h3>
+                          </div>
+                          {/* <!--table---> */}
+                          <ThemeProvider theme={theme}>
+                            <div style={{ height: "100%", width: "100%" }}>
+                              <DataGrid
+                                rows={activeRows}
+                                columns={activeColumns}
+                                headerClassName="custom-header"
+                                // getRowClassName={(params) =>
+                                //   isRowBordered(params) ? 'borderedGreen' : 'borderedRed'
+                                // }
+                                components={{ Toolbar: GridToolbar }}
+                                slots={{
+                                  toolbar: CustomToolbar,
+                                  footer: CustomFooterStatusComponent,
+                                }}
+                                autoHeight
+                                disableColumnResize={false} // Allow column resizing
+                                hideFooterPagination={window.innerWidth < 600} // Hide pagination for small screens
+                              />
+                            </div>
+                          </ThemeProvider>
+                        </>
+                      ) : (
+                        <>
+                          <div className="cntnt_title">
+                            <h3>Queue Calls</h3>
+                          </div>
+                          {/* <!--table---> */}
+                          <ThemeProvider theme={theme}>
+                            <div style={{ height: "100%", width: "100%" }}>
+                              <DataGrid
+                                rows={queueRows}
+                                columns={queueColumns}
+                                headerClassName="custom-header"
+                                // getRowClassName={(params) =>
+                                //   isRowBordered(params) ? 'borderedGreen' : 'borderedRed'
+                                // }
+                                components={{ Toolbar: GridToolbar }}
+                                slots={{
+                                  toolbar: CustomToolbar,
+                                  footer: CustomFooterStatusComponent,
+                                }}
+                                autoHeight
+                                disableColumnResize={false} // Allow column resizing
+                                hideFooterPagination={window.innerWidth < 600} // Hide pagination for small screens
+                              />
+                            </div>
+                          </ThemeProvider>
+                        </>
+                      )}
 
                       {/* <!--table-end--> */}
                     </div>
@@ -823,8 +842,9 @@ function SipCallActive() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+       </Box>
+       </div>
+       </div>
     </>
   );
 }

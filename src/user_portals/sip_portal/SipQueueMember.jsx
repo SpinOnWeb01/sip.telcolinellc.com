@@ -42,7 +42,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { api } from "../../mockData";
 import axios from "axios";
-
+const drawerWidth = 240;
 const theme = createTheme({
   components: {
     MuiDataGrid: {
@@ -87,14 +87,14 @@ const MenuProps = {
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
       <GridToolbarFilterButton />
     </GridToolbarContainer>
   );
 }
 
-function SipQueueMember() {
+function SipQueueMember({colorThem}) {
   const current_user = localStorage.getItem("current_user");
   const token = JSON.parse(localStorage.getItem(`user_${current_user}`));
   const state = useSelector((state) => state);
@@ -110,9 +110,9 @@ function SipQueueMember() {
   const [name, setName] = useState("");
 
   const handleAlertClose = () => {
-    setUniqueId("")
+    setUniqueId("");
     setAlertMessage(false);
-  }
+  };
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -144,18 +144,23 @@ function SipQueueMember() {
     );
   };
 
-  const handleMessage = useCallback((data) => {
-    setName(data?.extension)
-    setUniqueId(data?.uniqueid)
-    setAlertMessage(true);
-  }, [setName]); // Memoize event handler
+  const handleMessage = useCallback(
+    (data) => {
+      setName(data?.extension);
+      setUniqueId(data?.uniqueid);
+      setAlertMessage(true);
+    },
+    [setName]
+  ); // Memoize event handler
 
   const handleDelete = useCallback(
     (id) => {
-      dispatch(deleteManageQueueMember({ id: uniqueId }, setResponse, setUniqueId));
-       setAlertMessage(false);
+      dispatch(
+        deleteManageQueueMember({ id: uniqueId }, setResponse, setUniqueId)
+      );
+      setAlertMessage(false);
     },
-    [uniqueId,dispatch, setResponse, setUniqueId]
+    [uniqueId, dispatch, setResponse, setUniqueId]
   ); // Memoize event handler
 
   useEffect(() => {
@@ -217,9 +222,9 @@ function SipQueueMember() {
               />
             </IconButton> */}
             <Tooltip title="delete" disableInteractive interactive>
-            <IconButton onClick={() => handleMessage(params?.row)}>
-              <Delete style={{ cursor: "pointer", color: "red" }} />
-            </IconButton>
+              <IconButton onClick={() => handleMessage(params?.row)}>
+                <Delete style={{ cursor: "pointer", color: "red" }} />
+              </IconButton>
             </Tooltip>
           </div>
         );
@@ -265,7 +270,6 @@ function SipQueueMember() {
     //     width: 280,
     //     align: "center",
     //   },
-    
   ];
 
   const rows = useMemo(() => {
@@ -285,8 +289,18 @@ function SipQueueMember() {
   }, [state?.getManageQueueMember?.getQueueMember]);
   return (
     <>
-      <section className="sidebar-sec">
-        <div className="container-fluid">
+   
+           <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
           <div className="row">
             <div className="col-lg-12">
               <div className="">
@@ -477,72 +491,72 @@ function SipQueueMember() {
 
                       {/* Delete Confirmation Modal Start  */}
                       <Dialog
-              open={alertMessage}
-              onClose={handleAlertClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              sx={{ textAlign: "center" }}
-              //className="bg_imagess"
-            >
-              <DialogTitle
-                id="alert-dialog-title"
-                sx={{ color: "#07285d", fontWeight: "600" }}
-              >
-                {"Delete Confirmation"}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText
-                  id="alert-dialog-description"
-                  sx={{ paddingBottom: "0px !important" }}
-                >
-                  Are you sure you want to delete {name} ?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  paddingBottom: "20px",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  sx={{
-                    fontSize: "16px !impotant",
-                    background:
-                      "linear-gradient(180deg, #fb7804 0%, #D76300 100%) !important",
-                    marginTop: "20px",
-                    marginLeft: "0px !important",
-                    padding: "10px 20px !important",
-                    textTransform: "capitalize !important",
-                  }}
-                  className="all_button_clr"
-                  color="info"
-                  onClick={handleAlertClose}
-                  autoFocus
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  sx={{
-                    fontSize: "16px !impotant",
-                    marginTop: "20px",
-                    padding: "10px 20px !important",
-                    textTransform: "capitalize !important",
-                    marginLeft: "0px !important",
-                    marginRight: "0px !important",
-                  }}
-                  className="all_button_clr"
-                  color="error"
-                  onClick={handleDelete}
-                  startIcon={<DeleteIcon />}
-                >
-                  Delete
-                </Button>
-              </DialogActions>
-            </Dialog>
-            {/* Delete Confirmation Modal End  */}
+                        open={alertMessage}
+                        onClose={handleAlertClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        sx={{ textAlign: "center" }}
+                        //className="bg_imagess"
+                      >
+                        <DialogTitle
+                          id="alert-dialog-title"
+                          sx={{ color: "#07285d", fontWeight: "600" }}
+                        >
+                          {"Delete Confirmation"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText
+                            id="alert-dialog-description"
+                            sx={{ paddingBottom: "0px !important" }}
+                          >
+                            Are you sure you want to delete {name} ?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            paddingBottom: "20px",
+                          }}
+                        >
+                          <Button
+                            variant="contained"
+                            sx={{
+                              fontSize: "16px !impotant",
+                              background:
+                                "linear-gradient(180deg, #fb7804 0%, #D76300 100%) !important",
+                              marginTop: "20px",
+                              marginLeft: "0px !important",
+                              padding: "10px 20px !important",
+                              textTransform: "capitalize !important",
+                            }}
+                            className="all_button_clr"
+                            color="info"
+                            onClick={handleAlertClose}
+                            autoFocus
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              fontSize: "16px !impotant",
+                              marginTop: "20px",
+                              padding: "10px 20px !important",
+                              textTransform: "capitalize !important",
+                              marginLeft: "0px !important",
+                              marginRight: "0px !important",
+                            }}
+                            className="all_button_clr"
+                            color="error"
+                            onClick={handleDelete}
+                            startIcon={<DeleteIcon />}
+                          >
+                            Delete
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                      {/* Delete Confirmation Modal End  */}
 
                       {/* <!--table---> */}
                       <ThemeProvider theme={theme}>
@@ -577,8 +591,10 @@ function SipQueueMember() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+      </Box>
+      </div>
+      </div>
+
     </>
   );
 }

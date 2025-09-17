@@ -13,7 +13,7 @@ import socketIOClient from "socket.io-client";
 import { useSelector } from "react-redux";
 import React, { useEffect, useMemo, useState } from "react";
 import { api } from "../../mockData";
-
+const drawerWidth = 240;
 const theme = createTheme({
   components: {
     MuiDataGrid: {
@@ -55,7 +55,7 @@ function CustomToolbar() {
   );
 }
 
-function SipLiveExtension() {
+function SipLiveExtension({colorThem}) {
   const state = useSelector((state) => state);
   const current_user = localStorage.getItem("current_user");
   const uid = JSON.parse(localStorage.getItem(`user_${current_user}`));
@@ -193,8 +193,18 @@ function SipLiveExtension() {
   }, [liveExtension]);
 
   return (
-    <section className="sidebar-sec">
-      <div className="container-fluid">
+  
+           <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
         <div className="row">
           <div className="col-lg-12">
             <div className="">
@@ -244,8 +254,9 @@ function SipLiveExtension() {
             </div>
           </div>
         </div>
+      </Box>
       </div>
-    </section>
+      </div>
   );
 }
 

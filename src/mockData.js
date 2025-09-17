@@ -1,9 +1,7 @@
-const dev = "https://devsip.all8series.com";
-const prod = "https://sip.all8series.com";
-const domain = window.location.host;
+const prod = "https://voip.telcolinellc.com";
 
 export const api ={
-    dev:dev,
+    dev:prod,
 }
 
 export const usersGroupRolesList = [

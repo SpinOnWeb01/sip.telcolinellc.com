@@ -1,13 +1,17 @@
-import React from 'react';
-import { Outlet} from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import SipSidebar from "./SipSidebar";
 import Header from './Header';
-function SipLayout() {
-  return (
-    <div>
-    <Header/>
-    <Outlet/>
-  </div>
-  )
-};
 
-export default SipLayout;
+function SipLayout({colorThem,handleClick, mockDataTeam, radioValue}) {
+  return (
+    <>
+    <div className={`App ${colorThem} `}>
+      <Header colorThem={colorThem} handleClick={handleClick} mockDataTeam={mockDataTeam} radioValue={radioValue}/>
+      <SipSidebar colorThem={colorThem} />
+      <Outlet />
+      </div>
+    </>
+  )
+}
+
+export default SipLayout

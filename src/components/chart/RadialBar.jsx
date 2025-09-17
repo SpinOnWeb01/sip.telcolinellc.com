@@ -11,12 +11,6 @@ function RadialBar() {
               "x": "call_count",
               "y": 1
             },
-            {
-                "x": "call_count",
-                "y": 5
-              },
-           
-        
           ]
         },
         {
@@ -27,10 +21,7 @@ function RadialBar() {
               "x": "day_of_week",
               "y": 1
             },
-            {
-                "x": "day_of_week",
-                "y": 2
-              },
+           
           ]
         },
         {
@@ -41,10 +32,7 @@ function RadialBar() {
                 "x": "hour",
                 "y": 9
               },
-              {
-                  "x": "hour",
-                  "y": 9
-                },
+              
             ]
           },
         // {

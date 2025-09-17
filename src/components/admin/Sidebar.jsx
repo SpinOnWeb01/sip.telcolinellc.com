@@ -31,7 +31,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import PhoneDisabledIcon from "@mui/icons-material/PhoneDisabled";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 // ========Mobile-sidebar===============>
 import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -372,13 +372,11 @@ function Sidebar({ colorThem }) {
               ACL History
             </MenuItem>
             <MenuItem
-                            icon={<PeopleAltIcon />}
-                            onClick={(event) =>
-                              handleSubMenuClick(event, Router.ADMIN_ROLES)
-                            }
-                          >
-                            Roles
-                          </MenuItem>
+              icon={<PeopleAltIcon />}
+              onClick={(event) => handleSubMenuClick(event, Router.ADMIN_ROLES)}
+            >
+              Roles
+            </MenuItem>
             <MenuItem
               icon={<AssignmentIndIcon />}
               onClick={(event) =>
@@ -562,12 +560,12 @@ function Sidebar({ colorThem }) {
                           )}
                         </SubMenu>
 
-                        <MenuItem
+                        {/* <MenuItem
                           icon={<AddCardIcon />}
                           onClick={() => navigateTo(Router.ADMIN_PAYMENT)}
-                        >
+                         >
                           Payment
-                        </MenuItem>
+                        </MenuItem> */}
                         {user.user_role === "Reseller" ? (
                           <></>
                         ) : (
@@ -867,13 +865,13 @@ function Sidebar({ colorThem }) {
                           ) : (
                             <>
                               <MenuItem
-                            icon={<PeopleAltIcon />}
-                            onClick={(event) =>
-                              handleSubMenuClick(event, Router.ADMIN_ROLES)
-                            }
-                          >
-                            Roles
-                          </MenuItem>
+                                icon={<PeopleAltIcon />}
+                                onClick={(event) =>
+                                  handleSubMenuClick(event, Router.ADMIN_ROLES)
+                                }
+                              >
+                                Roles
+                              </MenuItem>
                               <MenuItem
                                 icon={<AssignmentIndIcon />}
                                 onClick={(event) =>

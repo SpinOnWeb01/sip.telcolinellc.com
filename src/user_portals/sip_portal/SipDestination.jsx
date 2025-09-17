@@ -42,6 +42,7 @@ import {
 import { getManageExtension } from "../../redux/actions/sipPortal/managePortal_extensionAction";
 import { api } from "../../mockData";
 import { ip } from "@form-validation/validator-ip";
+const drawerWidth = 240;
 const names = ["Manage"];
 const sub_type = ["Extension", "Queue"];
 const style = {
@@ -97,7 +98,7 @@ function CustomToolbar() {
   );
 }
 
-function SipDestination() {
+function SipDestination({colorThem}) {
   const current_user = localStorage.getItem("current_user");
   const token = JSON.parse(localStorage.getItem(`user_${current_user}`));
   const [edit, setEdit] = useState(false);
@@ -506,7 +507,7 @@ function SipDestination() {
           sub_type: item.sub_type,
           status: item?.is_active,
           recording: item?.recording,
-          sip_profile_name: item.sip_profile_name
+          sip_profile_name: item.sip_profile_name,
         });
       });
     return calculatedRows;
@@ -514,9 +515,18 @@ function SipDestination() {
 
   return (
     <>
-      <div className="main">
-        <section className="sidebar-sec">
-          <div className="container-fluid">
+    
+           <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
             <div className="row">
               <div className="col-lg-12">
                 <div className="">
@@ -537,7 +547,7 @@ function SipDestination() {
                           </p> */}
                         </div>
 
-                            {/*---------- Radio Buttons for filtering ---------------- */}
+                        {/*---------- Radio Buttons for filtering ---------------- */}
                         {/* <div>
                                                                           <FormControl>
                                                         <RadioGroup
@@ -834,41 +844,54 @@ function SipDestination() {
                                     {service === "IP" ? (
                                       <>
                                         <FormControl
-  fullWidth
-  style={{
-    width: "100%",
-    margin: "7px 0",
-    textAlign:"left"
-  }}
->
-  <InputLabel id="demo-simple-select-label">SIP Profiles</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="SIP Profiles"
-    //multiple
-    value={destinationAction}
-    onChange={(e) => setDestinationAction(e.target.value)}
-    input={<OutlinedInput label="SIP Profiles" />}
-    // renderValue={(selected) =>
-    //   selected
-    //     .map((id) =>
-    //       profileData?.find((item) => item.id === id)?.name // Find the name corresponding to the id
-    //     )
-    //     .join(", ") // Join the names into a comma-separated string
-    // }
-    MenuProps={MenuProps}
-    required
-  >
-    {state?.allManageDid?.allmanagedid?.data?.map((item) => (
-      <MenuItem key={item.details} value={item.details}>
-        {/* <Checkbox checked={destinationAction.includes(item.id)} />
+                                          fullWidth
+                                          style={{
+                                            width: "100%",
+                                            margin: "7px 0",
+                                            textAlign: "left",
+                                          }}
+                                        >
+                                          <InputLabel id="demo-simple-select-label">
+                                            SIP Profiles
+                                          </InputLabel>
+                                          <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            label="SIP Profiles"
+                                            //multiple
+                                            value={destinationAction}
+                                            onChange={(e) =>
+                                              setDestinationAction(
+                                                e.target.value
+                                              )
+                                            }
+                                            input={
+                                              <OutlinedInput label="SIP Profiles" />
+                                            }
+                                            // renderValue={(selected) =>
+                                            //   selected
+                                            //     .map((id) =>
+                                            //       profileData?.find((item) => item.id === id)?.name // Find the name corresponding to the id
+                                            //     )
+                                            //     .join(", ") // Join the names into a comma-separated string
+                                            // }
+                                            MenuProps={MenuProps}
+                                            required
+                                          >
+                                            {state?.allManageDid?.allmanagedid?.data?.map(
+                                              (item) => (
+                                                <MenuItem
+                                                  key={item.details}
+                                                  value={item.details}
+                                                >
+                                                  {/* <Checkbox checked={destinationAction.includes(item.id)} />
         <ListItemText primary={item.name} /> */}
-        {item.sip_profile_name}
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
+                                                  {item.sip_profile_name}
+                                                </MenuItem>
+                                              )
+                                            )}
+                                          </Select>
+                                        </FormControl>
                                       </>
                                     ) : (
                                       <></>
@@ -989,9 +1012,9 @@ function SipDestination() {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-      </div>
+        </Box>
+        </div>
+        </div>
     </>
   );
 }

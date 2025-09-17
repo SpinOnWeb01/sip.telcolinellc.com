@@ -1853,8 +1853,8 @@ td {
 } */
 main.right_sidebox {
   position: relative;
-  /* top: 65px; */
-  padding-top: 6em;
+  top: 64px;
+  padding-top: 2em;
   /* height: 100vh; */
   /* height: 100%; */
   left: 15rem;
@@ -1862,9 +1862,15 @@ main.right_sidebox {
   max-height: 100%;
   min-height: 100vh;
 }
-.tab_cntnt_box {
+/* .tab_cntnt_box {
   padding-top: 100px !important;
+} */
+
+.right_sidebox.mobile_top_pddng.users {
+    position: relative;
+  top: 15px;
 }
+
 .manage_boxx {
   position: fixed;
   z-index: 999 !important;
@@ -1929,6 +1935,8 @@ div#app {
   background-size: cover;
   background-position: center;
 }
+
+/* .css-xwq1mk-MuiDrawer-docked .MuiDrawer-paper{margin-top:4rem!important} */
 /* .MuiPaper-root.MuiPaper-elevation {
   background-image: url("/public/img/mdlbg-cover.jpg") !important;
   background-repeat: no-repeat;
@@ -2024,9 +2032,9 @@ div#app {
     border-radius: 30px;
     list-style: none;
   }
-  .css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+  /* .css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
     background: #27180b !important;
-  }
+  } */
   .logo_image {
     width: 80%;
   }
@@ -2079,9 +2087,9 @@ div#app {
     position: relative;
     z-index: 101;
   }
-  .css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+  /* .css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
     background: #27180b !important;
-  }
+  } */
   .pro-sidebar
     .pro-menu.shaped
     .pro-menu-item
@@ -2123,7 +2131,7 @@ div#app {
     width: 100%;
   }
   .tab_cntnt_box {
-    padding-top: 130px !important;
+    padding-top: 30px !important;
   }
   .manage_mobile_logo {
     padding: 8px;
@@ -2136,7 +2144,7 @@ div#app {
   }
   .mobile_top_pddng {
     /* padding-top: 13em !important; */
-    padding: 13em 8px !important;
+    padding: 6em 14px !important;
   }
   .manage_top_header {
     position: relative !important;
@@ -2477,16 +2485,16 @@ fieldset {
     padding: 4.5px 14px !important;
     justify-content: space-between !important;
   }
-  /* main.right_sidebox {
+   main.right_sidebox {
     position: absolute;
-    /* top: 65px; */
+    top: 64px!important;
 
   /* height: 100vh; 
     left: 15rem;
     background: #1a2336;
     /* z-index: 999; */
-  /* min-height: 100vh; 
-} */
+  /* min-height: 100vh; */
+} 
 }
 
 @media (max-width: 991.98px) {
@@ -2512,4 +2520,16 @@ fieldset {
     display: flex;
     justify-content: space-between;
   }
+}
+
+
+.sidebar-layout {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    display: flex
+;
+    flex-direction: column;
+    z-index: 101;
 }

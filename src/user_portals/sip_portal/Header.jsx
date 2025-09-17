@@ -62,7 +62,7 @@ function Header() {
   };
   const handleClose = (event) => {
     setOpen(false);
-    setExtension("")
+    setExtension("");
   };
   const handlePopoverClose = () => setAnchorEl(null);
   const handlePopoverToggle = (event) => {
@@ -100,7 +100,7 @@ function Header() {
       });
       localStorage.removeItem(`user_${current_user}`);
       localStorage.removeItem("current_user");
-      localStorage.removeItem("selectedTab")
+      localStorage.removeItem("selectedTab");
       navigate("/");
     }
   };
@@ -132,13 +132,13 @@ function Header() {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }} className="manage_boxx" >
+      <Box sx={{ flexGrow: 1 }} className="manage_boxx">
         <Box className="manage_mobile_logo d-lg-none d-md-none d-sm-block d-block">
           <Typography
             variant="h6"
             component="div"
             sx={{ flexGrow: 1 }}
-            className="d-flex align-items-center justify-content-center"
+            className="d-flex align-items-center justify-content-start"
           >
             <a href="/sip_portal" className="mobile_logo_center">
               <img
@@ -170,8 +170,8 @@ function Header() {
 
             <div className="manage_rgiht_bdr d-flex align-items-center">
               <div className="dshbrd_hdr_icon">
-                <div>
-                  <Typography
+                <div className="d-flex gap-1">
+                  {/* <Typography
                     style={{
                       color: "white",
                       fontSize: "14px",
@@ -182,10 +182,47 @@ function Header() {
                     {data?.data?.map((item, index) => {
                       return (
                         <>
-                          <div key={index}>&nbsp;{user.billing_type === "Postpaid" ? "Unlimited" : item.remaining_minutes}</div>
+                          <div key={index}>
+                            &nbsp;
+                            {user.billing_type === "Postpaid"
+                              ? "Unlimited"
+                              : item.remaining_minutes}
+                          </div>
                         </>
                       );
                     })}
+                  </Typography> */}
+                  <Typography
+                    style={{
+                      color: "white",
+                      fontSize: "14px",
+                      display: "flex",
+                    }}
+                  >
+                    Toll Free Minute: {user.totaltoll_minutes === null ? 0 : user.totaltoll_minutes}
+                    
+                  </Typography>
+                  <Typography
+                    style={{
+                      color: "white",
+                      fontSize: "14px",
+                      paddingLeft:'15px',
+                      display: "flex",
+                    }}
+                  >
+                    Local Minute: {user.total_minutes}
+                    {/* {data?.data?.map((item, index) => {
+                      return (
+                        <>
+                          <div key={index}>
+                            &nbsp;
+                            {user.total_minutes === "Postpaid"
+                              ? "Unlimited"
+                              : item.remaining_minutes}
+                          </div>
+                        </>
+                      );
+                    })} */}
                   </Typography>
                 </div>
               </div>
@@ -204,7 +241,6 @@ function Header() {
                     alt="profile"
                   />
                   <div className="profile_name">
-                  
                     <b>{user?.user_name} </b>
                   </div>
 
@@ -298,30 +334,32 @@ function Header() {
                       name="confirmpassword"
                     />
                     <FormControl
-                                    fullWidth
-                                    style={{ width: "100%", margin: "7px 0" }}
-                                  >
-                                    <InputLabel id="demo-simple-select-label">
-                                    Extension
-                                    </InputLabel>
-                                    <Select
-                                      labelId="demo-simple-select-label"
-                                      id="demo-simple-select"
-                                      label="Extension"
-                                      helperText="Select the language."
-                                      style={{ textAlign: "left" }}
-                                      value={extension}
-                                      onChange={(e) => {
-                                        setExtension(e.target.value);
-                                      }}
-                                    >
-                                      {state?.getManageProfileExtension?.getManageProfileExtension.map((item, index) => (
-                                        <MenuItem key={index} value={item}>
-                                          {item}
-                                        </MenuItem>
-                                      ))}
-                                    </Select>
-                                  </FormControl>
+                      fullWidth
+                      style={{ width: "100%", margin: "7px 0" }}
+                    >
+                      <InputLabel id="demo-simple-select-label">
+                        Extension
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        label="Extension"
+                        helperText="Select the language."
+                        style={{ textAlign: "left" }}
+                        value={extension}
+                        onChange={(e) => {
+                          setExtension(e.target.value);
+                        }}
+                      >
+                        {state?.getManageProfileExtension?.getManageProfileExtension.map(
+                          (item, index) => (
+                            <MenuItem key={index} value={item}>
+                              {item}
+                            </MenuItem>
+                          )
+                        )}
+                      </Select>
+                    </FormControl>
                   </Typography>
 
                   <Button
@@ -392,7 +430,7 @@ function Header() {
           </Toolbar>
         </AppBar>
         {/* <!--navbar-sec--> */}
-        <Navbar />
+        {/* <Navbar /> */}
       </Box>
     </>
   );

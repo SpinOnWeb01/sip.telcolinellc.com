@@ -43,6 +43,7 @@ import {
 } from "../../redux/actions/sipPortal/managePortal_extensionAction";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../mockData";
+const drawerWidth = 240;
 const style = {
   position: "absolute",
   top: "50%",
@@ -74,7 +75,7 @@ const theme = createTheme({
   },
 });
 
-function CustomToolbar() {
+function CustomToolbar( ) {
   return (
     <GridToolbarContainer>
       <GridToolbarColumnsButton />
@@ -84,7 +85,7 @@ function CustomToolbar() {
   );
 }
 
-function Extension() {
+function Extension({colorThem}) {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -117,9 +118,9 @@ function Extension() {
   const handleOpen = () => setOpen(true);
 
   const handleAlertClose = () => {
-    setExtensionId("")
+    setExtensionId("");
     setAlertMessage(false);
-  }
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -134,13 +135,11 @@ function Extension() {
     setExtensionId(data?.extension_id);
     setCallerId(data?.callerid);
     setExtensionNumber(data?.extension);
-    setStatus(data.active)
+    setStatus(data.active);
     setDescription(data.description);
     setError(""); // Reset error when switching users
     setBorderColor(""); // Reset border color when switching users
   };
-
-
 
   const handleChange = (event) => {
     setCallerId(event.target.value);
@@ -154,11 +153,14 @@ function Extension() {
     setCallerId("");
   }, []);
 
-  const handleMessage = useCallback((data) => {
-    setName(data?.extension)
-    setExtensionId(data?.extension_id)
-    setAlertMessage(true);
-  }, [setName]); // Memoize event handler
+  const handleMessage = useCallback(
+    (data) => {
+      setName(data?.extension);
+      setExtensionId(data?.extension_id);
+      setAlertMessage(true);
+    },
+    [setName]
+  ); // Memoize event handler
 
   const validatePassword = (password) => {
     const lengthValid = password.length >= 14;
@@ -210,18 +212,18 @@ function Extension() {
     (e) => {
       e.preventDefault();
       if (error === "") {
-      let data = JSON.stringify({
-        extension_id: extensionId,
-        extension: extensionNumber,
-        password: password,
-        active: status,
-        description:description,
-        caller_id : callerId
-      });
-      dispatch(
-        updateManageExtension(data, setOpenModal, setResponse, setPassword)
-      );
-    }
+        let data = JSON.stringify({
+          extension_id: extensionId,
+          extension: extensionNumber,
+          password: password,
+          active: status,
+          description: description,
+          caller_id: callerId,
+        });
+        dispatch(
+          updateManageExtension(data, setOpenModal, setResponse, setPassword)
+        );
+      }
     },
     [
       extensionId,
@@ -236,13 +238,19 @@ function Extension() {
       setPassword,
     ]
   );
-  
+
   const handleDelete = useCallback(
     (id) => {
-      dispatch(deleteManageExtension({ extension_id: extensionId }, setResponse, setExtensionId));
-       setAlertMessage(false);
+      dispatch(
+        deleteManageExtension(
+          { extension_id: extensionId },
+          setResponse,
+          setExtensionId
+        )
+      );
+      setAlertMessage(false);
     },
-    [extensionId,dispatch, setResponse, setExtensionId]
+    [extensionId, dispatch, setResponse, setExtensionId]
   ); // Memoize event handler
 
   useEffect(() => {
@@ -290,9 +298,9 @@ function Extension() {
               </IconButton>
             </Tooltip>
             <Tooltip title="delete" disableInteractive interactive>
-            <IconButton onClick={() => handleMessage(params?.row)}>
-              <Delete style={{ cursor: "pointer", color: "red" }} />
-            </IconButton>
+              <IconButton onClick={() => handleMessage(params?.row)}>
+                <Delete style={{ cursor: "pointer", color: "red" }} />
+              </IconButton>
             </Tooltip>
           </div>
         );
@@ -414,18 +422,28 @@ function Extension() {
           username: item?.username,
           extension_id: item?.id,
           callerid: item?.callerid,
-          active:item?.active,
+          active: item?.active,
           extensions_limit: item.extensions_limit,
           description: item.description,
-          
         });
       });
     return calculatedRows;
   }, [state?.allManageExtension?.allmanageextension]);
 
   return (
-    <section className="sidebar-sec">
-      <div className="container-fluid">
+
+    <>
+           <div className={`App ${colorThem} `}>
+            <div className="contant_box">
+              <Box
+                className="right_sidebox mobile_top_pddng users"
+                component="main"
+                sx={{
+                  flexGrow: 1,
+                  p: 3,
+                  width: { sm: `calc(100% - ${drawerWidth}px)` },
+                }}
+              >
         <div className="row">
           <div className="col-lg-12">
             <div className="">
@@ -561,73 +579,73 @@ function Extension() {
                     </div>
                     {/* Delete Confirmation Modal Start  */}
                     <Dialog
-              open={alertMessage}
-              onClose={handleAlertClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              sx={{ textAlign: "center" }}
-              //className="bg_imagess"
-            >
-              <DialogTitle
-                id="alert-dialog-title"
-                sx={{ color: "#07285d", fontWeight: "600" }}
-              >
-                {"Delete Confirmation"}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText
-                  id="alert-dialog-description"
-                  sx={{ paddingBottom: "0px !important" }}
-                >
-                  Are you sure you want to delete {name} ?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  paddingBottom: "20px",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  sx={{
-                    fontSize: "16px !impotant",
-                    background:
-                      "linear-gradient(180deg, #fb7804 0%, #D76300 100%) !important",
-                    marginTop: "20px",
-                    marginLeft: "0px !important",
-                    padding: "10px 20px !important",
-                    textTransform: "capitalize !important",
-                  }}
-                  className="all_button_clr"
-                  color="info"
-                  onClick={handleAlertClose}
-                  autoFocus
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  sx={{
-                    fontSize: "16px !impotant",
-                    marginTop: "20px",
-                    padding: "10px 20px !important",
-                    textTransform: "capitalize !important",
-                    marginLeft: "0px !important",
-                    marginRight: "0px !important",
-                  }}
-                  className="all_button_clr"
-                  color="error"
-                  onClick={handleDelete}
-                  startIcon={<DeleteIcon />}
-                >
-                  Delete
-                </Button>
-              </DialogActions>
-            </Dialog>
+                      open={alertMessage}
+                      onClose={handleAlertClose}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                      sx={{ textAlign: "center" }}
+                      //className="bg_imagess"
+                    >
+                      <DialogTitle
+                        id="alert-dialog-title"
+                        sx={{ color: "#07285d", fontWeight: "600" }}
+                      >
+                        {"Delete Confirmation"}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText
+                          id="alert-dialog-description"
+                          sx={{ paddingBottom: "0px !important" }}
+                        >
+                          Are you sure you want to delete {name} ?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          paddingBottom: "20px",
+                        }}
+                      >
+                        <Button
+                          variant="contained"
+                          sx={{
+                            fontSize: "16px !impotant",
+                            background:
+                              "linear-gradient(180deg, #fb7804 0%, #D76300 100%) !important",
+                            marginTop: "20px",
+                            marginLeft: "0px !important",
+                            padding: "10px 20px !important",
+                            textTransform: "capitalize !important",
+                          }}
+                          className="all_button_clr"
+                          color="info"
+                          onClick={handleAlertClose}
+                          autoFocus
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            fontSize: "16px !impotant",
+                            marginTop: "20px",
+                            padding: "10px 20px !important",
+                            textTransform: "capitalize !important",
+                            marginLeft: "0px !important",
+                            marginRight: "0px !important",
+                          }}
+                          className="all_button_clr"
+                          color="error"
+                          onClick={handleDelete}
+                          startIcon={<DeleteIcon />}
+                        >
+                          Delete
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
 
-            {/* Delete Confirmation Modal End  */}
+                    {/* Delete Confirmation Modal End  */}
                     {/* <!--table---> */}
                     <ThemeProvider theme={theme}>
                       <div style={{ height: "100%", width: "100%" }}>
@@ -706,51 +724,53 @@ function Extension() {
 
                             <br />
                             <TextField
-                                                                  style={{
-                                                                    width: "100%",
-                                                                    margin: "5px 0 5px 0",
-                                                                  }}
-                                                                  type="text"
-                                                                  label="Password"
-                                                                  variant="outlined"
-                                                                  name="password"
-                                                                  value={password}
-                                                                  onChange={(e) => {
-                                                                    const value = e.target.value;
-                                                                    setPassword(value);
-                                                                    validatePassword(value);
-                                                                  }}
-                                                                  error={!!error}
-                                                                  helperText={error}
-                                                                  InputProps={{
-                                                                    style: {
-                                                                      borderColor: borderColor,
-                                                                    },
-                                                                  }}
-                                                                />
+                              style={{
+                                width: "100%",
+                                margin: "5px 0 5px 0",
+                              }}
+                              type="text"
+                              label="Password"
+                              variant="outlined"
+                              name="password"
+                              value={password}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setPassword(value);
+                                validatePassword(value);
+                              }}
+                              error={!!error}
+                              helperText={error}
+                              InputProps={{
+                                style: {
+                                  borderColor: borderColor,
+                                },
+                              }}
+                            />
                             <br />
                             <FormControl
-                                fullWidth
-                                style={{ width: "100%", margin: "7px 0" }}
+                              fullWidth
+                              style={{ width: "100%", margin: "7px 0" }}
+                            >
+                              <InputLabel id="demo-simple-select-label">
+                                Status
+                              </InputLabel>
+                              <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Status"
+                                helperText="Select the language."
+                                style={{ textAlign: "left" }}
+                                value={status}
+                                onChange={(e) => {
+                                  setStatus(e.target.value);
+                                }}
+                                required
                               >
-                                <InputLabel id="demo-simple-select-label">
-                                  Status
-                                </InputLabel>
-                                <Select
-                                  labelId="demo-simple-select-label"
-                                  id="demo-simple-select"
-                                  label="Status"
-                                  helperText="Select the language."
-                                  style={{ textAlign: "left" }}
-                                  value={status}
-                                  onChange={(e)=>{setStatus(e.target.value)}}
-                                  required
-                                >
-                                  <MenuItem value={"true"}>Enable</MenuItem>
-                                  <MenuItem value={"false"}>Disable</MenuItem>
-                                </Select>
-                              </FormControl>
-                              <br/>
+                                <MenuItem value={"true"}>Enable</MenuItem>
+                                <MenuItem value={"false"}>Disable</MenuItem>
+                              </Select>
+                            </FormControl>
+                            <br />
                             <FormControl
                               fullWidth
                               style={{ margin: " 5px 0 5px 0" }}
@@ -781,22 +801,22 @@ function Extension() {
                               </Select>
                             </FormControl>
 
-                            <br/>
+                            <br />
                             <TextField
-                                      style={{
-                                        width: "100%",
-                                        margin: " 5px 0 5px 0",
-                                      }}
-                                      type="text"
-                                      label="Description"
-                                      variant="outlined"
-                                      padding={"0px 0 !important"}
-                                      name="description"
-                                      value={description}
-                                      onChange={(e) => {
-                                        setDescription(e.target.value);
-                                      }}
-                                    />
+                              style={{
+                                width: "100%",
+                                margin: " 5px 0 5px 0",
+                              }}
+                              type="text"
+                              label="Description"
+                              variant="outlined"
+                              padding={"0px 0 !important"}
+                              name="description"
+                              value={description}
+                              onChange={(e) => {
+                                setDescription(e.target.value);
+                              }}
+                            />
                           </form>
                         </Typography>
                       </DialogContent>
@@ -857,8 +877,11 @@ function Extension() {
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      
+     </Box>
+     </div>
+     </div>
+     </>
   );
 }
 

@@ -3,7 +3,7 @@ import "../../../src/style.css";
 import { useLocation } from "react-router-dom";
 import { Line, Pie } from "react-chartjs-2";
 import { useDispatch, useSelector } from "react-redux";
-import { ResponsivePie } from '@nivo/pie';
+import { ResponsivePie } from "@nivo/pie";
 import PieChart from "../../components/chart/PieChart";
 import Barchart from "../../components/chart/Barchart";
 import Chordchart from "../../components/chart/Chordchart";
@@ -13,54 +13,58 @@ import { Box } from "@mui/material";
 import { getManageReport } from "../../redux/actions/sipPortal/sipPortal_reportAction";
 import Cpuchart from "../../components/chart/Heatmap";
 import dayjs from "dayjs";
-function Dashboard() {
+const drawerWidth = 240;
+function Dashboard({ colorThem }) {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
   const current_user = localStorage.getItem("current_user");
-    const user = localStorage.getItem(`user_${current_user}`)
+  const user = localStorage.getItem(`user_${current_user}`);
   const userId = user?.uid;
   //const location = useLocation();
   //const data = location?.state;
   useEffect(() => {
- 
     dispatch(getManageReport({}));
   }, [dispatch]);
 
-  let duration =[];
+  let duration = [];
   let averageDuration = 0;
-  let averageBillSec = 0; 
-  let billSec =[];
-  const testData = () =>{
+  let averageBillSec = 0;
+  let billSec = [];
+  const testData = () => {
     state?.allManageReport?.managereport?.data &&
-  state?.allManageReport?.managereport?.data?.map((item, index) => {
-    if(item?.user_uuid === JSON.stringify(userId) && item.service_type === "MANAGE"){
-      duration.push(item?.duration)
-    const durations = duration.map(entry => entry);
-    const sumDurations = durations?.reduce((sum, duration) => sum + duration, 0);
-     averageDuration = sumDurations / duration?.length;
-     billSec.push(item?.billsec)
-    const bill = billSec?.map(entry => entry);
-    const sumBillSec = bill?.reduce((sum, billsec) => sum + billsec, 0);
-    averageBillSec = sumBillSec / billSec?.length;
+      state?.allManageReport?.managereport?.data?.map((item, index) => {
+        if (
+          item?.user_uuid === JSON.stringify(userId) &&
+          item.service_type === "MANAGE"
+        ) {
+          duration.push(item?.duration);
+          const durations = duration.map((entry) => entry);
+          const sumDurations = durations?.reduce(
+            (sum, duration) => sum + duration,
+            0
+          );
+          averageDuration = sumDurations / duration?.length;
+          billSec.push(item?.billsec);
+          const bill = billSec?.map((entry) => entry);
+          const sumBillSec = bill?.reduce((sum, billsec) => sum + billsec, 0);
+          averageBillSec = sumBillSec / billSec?.length;
+        }
+      });
+  };
 
-    
-    }
-  })
-  }
-   
-  testData()
+  testData();
   const data1 = [
     {
-      "id": "Average Call Duration",
-      "label": "Average Call Duration",
-      "value": averageDuration.toFixed(2),
-      "color": "hsl(240, 100%, 50%)"
+      id: "Average Call Duration",
+      label: "Average Call Duration",
+      value: averageDuration.toFixed(2),
+      color: "hsl(240, 100%, 50%)",
     },
     {
-      "id": "Average Bill Sec",
-      "label":"Average Bill Sec",
-      "value": averageBillSec.toFixed(2),
-      "color": "hsl(358, 70%, 50%)"
+      id: "Average Bill Sec",
+      label: "Average Bill Sec",
+      value: averageBillSec.toFixed(2),
+      color: "hsl(358, 70%, 50%)",
     },
     // {
     //   "id": "Monthly Used Minutes",
@@ -78,8 +82,21 @@ function Dashboard() {
 
   return (
     <>
-    <section className="sidebar-sec">
+      {/* <section className="sidebar-sec">
         <div className="container-fluid">
+           */}
+
+           <div className={`App ${colorThem} `}>
+        <div className="contant_box">
+          <Box
+            className="right_sidebox mobile_top_pddng users"
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
           <div className="row">
             <div className="col-lg-12">
               <div className="">
@@ -103,123 +120,116 @@ function Dashboard() {
 
                       {/* <!--table---> */}
                       <div className="row">
-                      
                         <div className="col-lg-6 py-lg-0 py-md-2 py-sm-2 ">
-                        
-                          
-                        <div className="pie-container">
-                       
-                        <h4>Calls Metrics</h4>
-      <Box m="20px">
-        <Box height="50vh">
-       
-          <ResponsivePie
-            data={data1}
-            margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-            innerRadius={0.5}
-            padAngle={0.7}
-            cornerRadius={3}
-            activeOuterRadiusOffset={8}
-            borderWidth={1}
-            motionStiffness={90}
-            motionDamping={15}
-            animate={true}
-            borderColor={{
-              from: 'color',
-              modifiers: [['darker', 0.2]]
-            }}
-            arcLinkLabelsSkipAngle={10}
-            arcLinkLabelsTextColor="#333333"
-            arcLinkLabelsThickness={2}
-            arcLinkLabelsColor={{ from: 'color' }}
-            arcLabelsSkipAngle={10}
-            arcLabelsTextColor={{
-              from: 'color',
-              modifiers: [['darker', 2]]
-            }}
-            defs={[
-              {
-                id: 'dots',
-                type: 'patternDots',
-                background: 'inherit',
-                color: 'rgba(255, 255, 255, 0.3)',
-                size: 4,
-                padding: 1,
-                stagger: true
-              },
-              {
-                id: 'lines',
-                type: 'patternLines',
-                background: 'inherit',
-                color: 'rgba(255, 255, 255, 0.3)',
-                rotation: -45,
-                lineWidth: 6,
-                spacing: 10
-              }
-            ]}
-            legends={[
-              {
-                anchor: 'bottom',
-                direction: 'row',
-                justify: false,
-                translateX: 0,
-                translateY: 56,
-                itemsSpacing: 67,
-                itemWidth: 100,
-                itemHeight: 18,
-                itemTextColor: '#999',
-                itemDirection: 'left-to-right',
-                itemOpacity: 1,
-                symbolSize: 18,
-                symbolShape: 'circle',
-                effects: [
-                  {
-                    on: 'hover',
-                    style: {
-                      itemTextColor: '#000'
-                    }
-                  }
-                ]
-              }
-            ]}
-          />
-         
-        </Box>
-      </Box>
-      </div>
-    
-                         
+                          <div className="pie-container">
+                            <h4>Calls Metrics</h4>
+                            <Box m="20px">
+                              <Box height="50vh">
+                                <ResponsivePie
+                                  data={data1}
+                                  margin={{
+                                    top: 40,
+                                    right: 80,
+                                    bottom: 80,
+                                    left: 80,
+                                  }}
+                                  innerRadius={0.5}
+                                  padAngle={0.7}
+                                  cornerRadius={3}
+                                  activeOuterRadiusOffset={8}
+                                  borderWidth={1}
+                                  motionStiffness={90}
+                                  motionDamping={15}
+                                  animate={true}
+                                  borderColor={{
+                                    from: "color",
+                                    modifiers: [["darker", 0.2]],
+                                  }}
+                                  arcLinkLabelsSkipAngle={10}
+                                  arcLinkLabelsTextColor="#333333"
+                                  arcLinkLabelsThickness={2}
+                                  arcLinkLabelsColor={{ from: "color" }}
+                                  arcLabelsSkipAngle={10}
+                                  arcLabelsTextColor={{
+                                    from: "color",
+                                    modifiers: [["darker", 2]],
+                                  }}
+                                  defs={[
+                                    {
+                                      id: "dots",
+                                      type: "patternDots",
+                                      background: "inherit",
+                                      color: "rgba(255, 255, 255, 0.3)",
+                                      size: 4,
+                                      padding: 1,
+                                      stagger: true,
+                                    },
+                                    {
+                                      id: "lines",
+                                      type: "patternLines",
+                                      background: "inherit",
+                                      color: "rgba(255, 255, 255, 0.3)",
+                                      rotation: -45,
+                                      lineWidth: 6,
+                                      spacing: 10,
+                                    },
+                                  ]}
+                                  legends={[
+                                    {
+                                      anchor: "bottom",
+                                      direction: "row",
+                                      justify: false,
+                                      translateX: 0,
+                                      translateY: 56,
+                                      itemsSpacing: 67,
+                                      itemWidth: 100,
+                                      itemHeight: 18,
+                                      itemTextColor: "#999",
+                                      itemDirection: "left-to-right",
+                                      itemOpacity: 1,
+                                      symbolSize: 18,
+                                      symbolShape: "circle",
+                                      effects: [
+                                        {
+                                          on: "hover",
+                                          style: {
+                                            itemTextColor: "#000",
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  ]}
+                                />
+                              </Box>
+                            </Box>
+                          </div>
                         </div>
                         <div className="col-lg-6 py-lg-0 py-md-2 py-sm-2">
-                        <div className="pie-container">
-      {/* <Box m="20px">
-        <Box height="50vh"> */}
-                        <h4> Calls Weekly Trend</h4>
-                          <RadialBar/>
-                        {/* <Cpuchart/>  */}
-                        </div>
-                        {/* </Box>
+                          <div className="pie-container">
+                            {/* <Box m="20px">
+                            <Box height="50vh"> */}
+                            <h4> Calls Weekly Trend</h4>
+                            <RadialBar />
+                            {/* <Cpuchart/>  */}
+                          </div>
+                          {/* </Box>
                         </Box> */}
-                         
-                       
-                      </div>
+                        </div>
 
-                      {/* <div className="col-lg-6 mt-4">
+                        {/* <div className="col-lg-6 mt-4">
                         
                           
                         <Barchart/> 
                          
                        
                       </div> */}
-                      {/* <div className="col-lg-6 mt-4 mrgn_top">
+                        {/* <div className="col-lg-6 mt-4 mrgn_top">
                       
                         
                       <Chordchart/> 
                        
                      
                     </div> */}
-
-                       
                       </div>
                       {/* <!--table-end--> */}
                     </div>
@@ -495,10 +505,13 @@ function Dashboard() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-   
-     
+
+          </Box>
+          </div>
+          </div>
+
+        {/* </div>
+      </section> */}
     </>
   );
 }
