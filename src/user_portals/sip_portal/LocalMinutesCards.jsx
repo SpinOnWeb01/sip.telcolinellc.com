@@ -99,9 +99,9 @@ export default function LocalMinutesCards() {
         {user.toll_total_minutes !== null &&
           user.toll_total_used_minutes !== null &&
           user.toll_remaining_minutes !== null && (
-            <h4 style={{ marginBottom: 8, fontWeight: 400 }}>
+            <h5 style={{ marginBottom: 8, fontWeight: 400, paddingRight:2, }}>
               Toll Free Minutes
-            </h4>
+            </h5>
           )}
 
         <Grid container spacing={4} sx={{ mb: 3 }}>
@@ -185,7 +185,7 @@ export default function LocalMinutesCards() {
         {user.local_total_minutes !== null &&
           user.local_total_used_minutes !== null &&
           user.local_remaining_minutes !== null && (
-            <h4 style={{ marginBottom: 8, fontWeight: 400 }}>Local Minutes</h4>
+            <h5 style={{ marginBottom: 8, fontWeight: 400, paddingRight:2, }}>Local Minutes</h5>
           )}
 
         <Grid container spacing={4}>

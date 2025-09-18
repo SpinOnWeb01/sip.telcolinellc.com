@@ -395,7 +395,7 @@ function Header() {
                 </Box>
               </Modal>
               {/* modal-end */}
-              <Dropdown>
+              {/* <Dropdown>
                 <Dropdown.Toggle
                   className="dropbtn"
                   id="dropdown-basic"
@@ -414,7 +414,7 @@ function Header() {
                   </Dropdown.Item>
                   <Dropdown.Item href="/sip_portal">Sip</Dropdown.Item>
                 </Dropdown.Menu>
-              </Dropdown>
+              </Dropdown> */}
 
               <IconButton
                 size="large"
